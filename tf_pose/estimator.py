@@ -41,7 +41,7 @@ def _include_part(part_list, part_idx):
     return False, None
 
 
-def face_overlay(image, image_tmp, cascade):
+def face_overlay(image, image_tmp, cascade,mode='karaage'):
     # image padding
     padding_size = int(image.shape[1] / 2)
     padding_img = cv2.copyMakeBorder(image, padding_size, padding_size , padding_size, padding_size, cv2.BORDER_CONSTANT, value=(0,0,0))
@@ -58,6 +58,8 @@ def face_overlay(image, image_tmp, cascade):
             face_size = rect[2] * 2
             face_pos_adjust = int(rect[2] * 0.5)
             face_img = cv2.imread('./karaage_icon.png', cv2.IMREAD_UNCHANGED)
+            if mode == 'cyo_test':
+                face_img = cv2.imread('./char_icon.png', cv2.IMREAD_UNCHANGED)
             face_img = cv2.resize(face_img, (face_size, face_size))
             mask = face_img[:,:,3]
             mask = cv2.cvtColor(mask, cv2.COLOR_GRAY2BGR)
@@ -447,8 +449,8 @@ class TfPoseEstimator:
         image_h, image_w = npimg.shape[:2]
 
         # black background
-#        if mode == 'anime':
-#            npimg = np.zeros((image_h, image_w, 3), np.uint8)
+        if mode == 'anime':
+            npimg = np.zeros((image_h, image_w, 3), np.uint8)
 
         centers = {}
         for human in humans:
@@ -470,6 +472,19 @@ class TfPoseEstimator:
                 if mode == 'pose':
                     cv2.circle(npimg, center, 3, common.CocoColors[i], thickness=3, lineType=8, shift=0)
                 if mode == 'anime':
+                    if i == 4 or i == 7: # draw wrist
+                        cv2.circle(npimg, center, 50, human_color, thickness=-1, lineType=8, shift=0)
+                    if i == 10 or i == 13: # draw ankle
+                        cv2.circle(npimg, center, 60, human_color, thickness=-1, lineType=8, shift=0)
+                    if i == 2: # Store RShoulder position
+                        rshoulder_pos = center
+                    if i == 5: # Store LShoulder position
+                        lshoulder_pos = center
+                    if i == 8: # Store RHip position
+                        rhip_pos = center
+                    if i == 11: # Store LHip position
+                        lhip_pos = center
+                if mode == 'cyo_test':
                     if i == 4 or i == 7: # draw wrist
                         cv2.circle(npimg, center, 20, [0,255,0], thickness=-1, lineType=8, shift=0)
                     if i == 10 or i == 13: # draw ankle
@@ -501,6 +516,9 @@ class TfPoseEstimator:
                     # npimg = cv2.line(npimg, centers[pair[0]], centers[pair[1]], common.CocoColors[pair_order], 3)
                     cv2.line(npimg, centers[pair[0]], centers[pair[1]], common.CocoColors[pair_order], 3)
                 if mode == 'anime':
+                    if pair_order < 13: # under neck
+                        cv2.line(npimg, centers[pair[0]], centers[pair[1]], human_color, 50)
+                if mode == 'cyo_test':
                     if pair_order < 13: # under neck
                         cv2.line(npimg, centers[pair[0]], centers[pair[1]], [0,0,255], 10)
 
