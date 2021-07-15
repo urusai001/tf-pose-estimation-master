@@ -471,9 +471,9 @@ class TfPoseEstimator:
                     cv2.circle(npimg, center, 3, common.CocoColors[i], thickness=3, lineType=8, shift=0)
                 if mode == 'anime':
                     if i == 4 or i == 7: # draw wrist
-                        cv2.circle(npimg, center, 50, human_color, thickness=-1, lineType=8, shift=0)
+                        cv2.circle(npimg, center, 20, [0,255,0], thickness=-1, lineType=8, shift=0)
                     if i == 10 or i == 13: # draw ankle
-                        cv2.circle(npimg, center, 60, human_color, thickness=-1, lineType=8, shift=0)
+                        cv2.circle(npimg, center, 30, [0,255,0], thickness=-1, lineType=8, shift=0)
                     if i == 2: # Store RShoulder position
                         rshoulder_pos = center
                     if i == 5: # Store LShoulder position
@@ -502,7 +502,7 @@ class TfPoseEstimator:
                     cv2.line(npimg, centers[pair[0]], centers[pair[1]], common.CocoColors[pair_order], 3)
                 if mode == 'anime':
                     if pair_order < 13: # under neck
-                        cv2.line(npimg, centers[pair[0]], centers[pair[1]], human_color, 50)
+                        cv2.line(npimg, centers[pair[0]], centers[pair[1]], [0,0,255], 10)
 
         return npimg
 
