@@ -447,8 +447,8 @@ class TfPoseEstimator:
         image_h, image_w = npimg.shape[:2]
 
         # black background
-        if mode == 'anime':
-            npimg = np.zeros((image_h, image_w, 3), np.uint8)
+#        if mode == 'anime':
+#            npimg = np.zeros((image_h, image_w, 3), np.uint8)
 
         centers = {}
         for human in humans:
